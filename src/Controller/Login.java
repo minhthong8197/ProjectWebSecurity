@@ -25,54 +25,51 @@ public class Login extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		/*RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/index.jsp");
-		dispatcher.forward(request, response);*/
+		RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/index.jsp");
+		dispatcher.forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		String username = request.getParameter("userName");
-		System.out.println(username);
 		String password = request.getParameter("password");
-		System.out.println(password);
 
 		try {
-			int tbl = UsersDAO.LoadUser(username, password);
-			if (tbl == 1) {
+			String tbl = UsersDAO.LoadUser(username, password);
+			if (tbl.equals("Admin")) {
 				HttpSession session = request.getSession();
 				session.setAttribute("userName", username);
 				RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/Admin_Manager_Post.jsp");
 
 				dispatcher.forward(request, response);
 				System.out.println("Connection Successfully !");
-				System.out.println("Hi " + username);
+				System.out.println("Hello Admin " + username);
 			}
-			if (tbl == 2) {
+			if (tbl.equals("Writer")) {
 				HttpSession session = request.getSession();
 				session.setAttribute("userName", username);
 				RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/Reviewer_Check.jsp");
 
 				dispatcher.forward(request, response);
 				System.out.println("Connection Successfully !");
-				System.out.println("Good morning " + username);
+				System.out.println("Hello Editer " + username);
 			}
-			if (tbl == 3) {
+			if (tbl.equals("Reviewer")) {
 				HttpSession session = request.getSession();
 				session.setAttribute("userName", username);
 				RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/Writer_Manager.jsp");
 
 				dispatcher.forward(request, response);
 				System.out.println("Connection Successfully !");
-				System.out.println("Bye " + username);
+				System.out.println("Hello Writer " + username);
 			} else {
 
 			}
 		} catch (SQLException e) {
-			System.out.println("Catch 1");
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			System.out.println("Catch 2");
+
 			e.printStackTrace();
 		}
 	}
